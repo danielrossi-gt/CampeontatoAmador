@@ -1,0 +1,74 @@
+@charset "utf-8";
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: x-small;
+	background-color: #CCCCCC;
+}
+ul {
+	font-size: small;
+}
+h3 {
+	font-size: small;
+	vertical-align: middle;
+}
+td {
+	font-size: small;
+	/*border: thin solid #CCCCCC;*/
+	height:25px;
+}
+.noborder {
+	border-top-width: thin;
+	border-right-width: thin;
+	border-bottom-width: thin;
+	border-left-width: thin;
+	/*border-top-width: none;
+	border-right-width: none;
+	border-bottom-width: none;
+	border-left-width: none;*/
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+	height:25px;
+}
+
+.tinytext {
+	font-size: x-small;
+}
+
+a {
+	font-size: small;
+	color: #0066FF;
+}
+th {
+	font-size: xx-small;
+	font-weight: bold;
+	color: #FFFFFF;
+	background-color: #999999;
+	text-align: center;
+}
+input {
+	font-size: small;
+}
+
+div {
+    background-color: rgba(255,255,255,.8);
+    margin: 100px auto 100px auto;
+    padding: 10px;
+    width: 800px;
+    /*min-height:400px;*/
+}
+
+img {
+    border: none;
+    text-decoration: none;
+    
+}
+
+div#partida {
+    background-color: rgba(255,255,255,.8);
+    margin: 20px auto 100px auto;
+    padding: 10px;
+    width: 800px;
+    min-height:400px;
+}

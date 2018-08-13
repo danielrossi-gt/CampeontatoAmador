@@ -1,0 +1,306 @@
+<?php
+
+    require_once('/../_conn/conn.php'); 
+    require_once('/../_lib/WideImage.php');
+
+    //Cria um dataset básico
+    function Dataset($tabela, $filtro, $ordem) {
+		$tabela = strtolower($tabela);
+
+        $SQL = 'SELECT * FROM ' . $tabela ;
+
+        //Aplica o filtro
+        if ($filtro != '') {$SQL .= ' WHERE ' . $filtro; }
+
+        //Aplica ordenação
+        if ($ordem != '') { $SQL .= ' ORDER BY ' . $ordem; }
+
+        $ds = mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");;
+
+        //   echo $SQL;
+
+        return $ds;
+    }
+	
+    function EscreveTabela($tabela) {
+
+        if ($tabela == "categoria") {
+            echo "Categoria";			
+        }
+
+        if ($tabela == "serie") {
+            echo "Série";
+        }
+
+        if ($tabela == "campeonato") {
+            echo "Campeonato";
+        }
+        
+        if ($tabela == "confronto") {
+            echo "Confronto";
+        }
+        
+        if ($tabela == "time") {
+            echo "Time";
+        }
+
+        if ($tabela == "partida") {
+            echo "Partida";
+        }
+
+        if ($tabela == "usuario") {
+            echo "Usuário";
+        }       
+        
+        if ($tabela == "jogador") {
+            echo "Jogador";
+        }
+    }
+  
+    //Série
+    function InsSerie($descricao) {
+        $SQL = "INSERT INTO SERIE (DESCRICAO) VALUES ('$descricao')";
+        mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+    
+    function UpdSerie($chave, $descricao) {
+		$SQL =  "UPDATE SERIE SET DESCRICAO = '$descricao' ";
+		$SQL .= "WHERE CHAVE = $chave";
+		mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+  
+    function DelSerie($chave) {
+        $SQL = "DELETE FROM SERIE WHERE CHAVE = " . $chave;
+		mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+    
+    function EscreveSerie($value, $tipo) {
+		
+        if ($tipo == 1) {
+            $SQL = "SELECT DESCRICAO FROM SERIE WHERE CHAVE = $value";
+            $dss = mysql_query($SQL);
+            if (mysql_num_rows($dss) > 0) {
+                echo mysql_result($dss, 0, "DESCRICAO");
+            }
+        }
+        else if ($tipo == 2) {
+            $SQL = "SELECT CHAVE, DESCRICAO FROM SERIE";
+            $dss = mysql_query($SQL);
+            $nrf = mysql_num_rows($dss);
+            
+            for ($i = 0; $i < $nrf; $i ++) {
+                $chave = mysql_result($dss, $i, "CHAVE");
+                $descricao = mysql_result($dss, $i, "DESCRICAO");
+
+                echo "<option value='$chave'";
+                if ($value == $chave) { echo " selected=\"selected\" "; }
+                echo ">$descricao</option>";
+            }            
+        }
+        else {
+            echo "Nenhum";
+        }
+		
+    }
+    
+    //Categoria
+    function InsCategoria($descricao) {
+        $SQL = "INSERT INTO CATEGORIA (DESCRICAO) VALUES ('$descricao')";
+        mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+    
+    function UpdCategoria($chave, $descricao) {
+	$SQL =  "UPDATE CATEGORIA SET DESCRICAO = '$descricao' ";
+	$SQL .= "WHERE CHAVE = $chave";
+	mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+  
+    function DelCategoria($chave) {
+        $SQL = "DELETE FROM CATEGORIA WHERE CHAVE = " . $chave;
+	mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+    
+    function EscreveCategoria($value, $tipo) {
+		
+	if ($tipo == 1) {
+            $SQL = "SELECT DESCRICAO FROM CATEGORIA WHERE CHAVE = $value";
+            $dsc = mysql_query($SQL);
+            if (mysql_num_rows($dsc) > 0) {
+		echo mysql_result($dsc, 0, "DESCRICAO");
+            }
+        }
+        else if ($tipo == 2) {
+            $SQL = "SELECT CHAVE, DESCRICAO FROM CATEGORIA";
+            $dsc = mysql_query($SQL);
+            $nrc = mysql_num_rows($dsc);
+            
+            for ($i = 0; $i < $nrc; $i ++) {
+                $chave = mysql_result($dsc, $i, "CHAVE");
+                $descricao = mysql_result($dsc, $i, "DESCRICAO");
+                
+                echo "<option value='$chave'";
+                if ($value == $chave) { echo " selected=\"selected\" "; }
+                echo ">$descricao</option>";
+            }               
+        }
+        else {
+            echo "Nenhum";
+        }
+	  
+    }    
+    
+    //Campeonato
+    function InsCampeonato($descricao, $categoria, $serie) {
+        $SQL = "INSERT INTO CAMPEONATO (DESCRICAO, CATEGORIA, SERIE) VALUES ('$descricao', '$categoria', '$serie')";
+        mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+    
+    function UpdCampeonato($chave, $descricao, $categoria, $serie) {
+	$SQL =  "UPDATE CAMPEONATO SET DESCRICAO = '$descricao', CATEGORIA = '$categoria', SERIE = '$serie' ";
+	$SQL .= "WHERE CHAVE = $chave";
+	mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+  
+    function DelCampeonato($chave) {
+        $SQL = "DELETE FROM CAMPEONATO WHERE CHAVE = " . $chave;
+	mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+    
+    function EscreveCampeonato($chave) {
+        $dsc = Dataset("campeonato", "CHAVE = $chave", "");
+        return mysql_result($dsc, 0, "DESCRICAO");
+    }
+    
+    // Usuário
+    function InsUsuario($nome, $email, $senha) {
+        $SQL = "INSERT INTO USUARIO (NOME, EMAIL, SENHA) VALUES ('$nome', '$email', PASSWORD('$senha'))";
+        mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+    
+    function UpdUsuario($chave, $nome, $email, $senha) {
+	$SQL =  "UPDATE USUARIO SET NOME = '$nome', EMAIL = '$email', SENHA = PASSWORD('$senha') ";
+	$SQL .= "WHERE CHAVE = $chave";
+	mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+  
+    function DelUsuario($chave) {
+        $SQL = "DELETE FROM USUARIO WHERE CHAVE = " . $chave;
+	mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+    
+    // Confronto
+    function InsConfronto($descricao) {
+        $SQL = "INSERT INTO CONFRONTO (DESCRICAO, CAMPEONATO) VALUES ('$descricao', ".$_SESSION["campeonato_chave"].")";
+        mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+    
+    function UpdConfronto($chave, $descricao) {
+	$SQL =  "UPDATE CONFRONTO SET DESCRICAO = '$descricao' ";
+	$SQL .= "WHERE CHAVE = $chave";
+	mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }
+  
+    function DelConfronto($chave) {
+        $SQL = "DELETE FROM CONFRONTO WHERE CHAVE = " . $chave;
+	mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+    }    
+    
+    function EscreveConfronto($chave) {
+        $SQL = "SELECT DESCRICAO FROM CONFRONTO WHERE CHAVE = $chave";
+	$dst = mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+        return mysql_result($dst, 0, "DESCRICAO");        
+    }
+  
+    // Time
+    function InsTime ($nome, $distintivo) {
+        $SQL = "INSERT INTO TIME (NOME) VALUES ('$nome')";
+        mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+        
+        // Recuperar a chave usado no insert
+        $chaveNova = mysql_insert_id();
+        
+        // Gravando distintivo
+        if ($distintivo != '') {
+            
+            $img = WideImage::load($distintivo);
+            $redimensionar = $img->resize(45,45,'inside');
+            $redimensionar->saveToFile("_imagens/_distintivos/".$chaveNova.".png");
+            
+            // Apagar o arquivo original e mantém apenas o redimensionado
+            unlink($distintivo);
+        }
+    }
+    
+    function UpdTime($chave, $nome, $distintivo) {
+	$SQL =  "UPDATE TIME SET NOME = '$nome'";
+	$SQL .= "WHERE CHAVE = $chave";
+	mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+        
+        // Gravando distintivo
+        if ($distintivo != '') {
+            
+            $img = WideImage::load($distintivo);
+            $redimensionar = $img->resize(45,45,'inside');
+            $redimensionar->saveToFile("_imagens/_distintivos/".$chave.".png");
+            
+            // Apagar o arquivo original e mantém apenas o redimensionado
+            unlink($distintivo);
+        }        
+    }
+    
+    function DelTime($chave) {
+        $SQL = " SELECT * FROM PARTIDA WHERE TIME_MANDANTE = ".$chave." OR TIME_VISITANTE = ".$chave;
+        $ds = mysql_query($SQL);
+        $nr = mysql_num_rows($ds); //número de registros totais    
+
+        if($nr > 0) {            
+            die ("<b>ERRO! Esse time não pode ser excluído pois possui partidas cadastrados! </b>");
+        } else {
+            $SQL = " SELECT * FROM JOGADOR WHERE TIME = ".$chave;            
+            $ds = mysql_query($SQL);
+            $nr = mysql_num_rows($ds); //número de registros totais    
+            
+            if ($nr > 0) {
+                die ("<b>ERRO! Esse time não pode ser excluído pois possui jogadores cadastrados! </b>");                                            
+            } else {
+                $SQL = "DELETE FROM TIME WHERE CHAVE = " . $chave;
+                mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+                
+                @unlink("_imagens/_distintivos/".$chave.".png");
+            }
+        }     
+    }      
+    
+    function EscreveTime($chave) {
+        $SQL = "SELECT NOME FROM TIME WHERE CHAVE = $chave";
+	$dst = mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+        return mysql_result($dst, 0, "NOME");
+    }
+  
+    // Passando data do banco "AAAA-MM-DD" para "DD/MM/AAAA"
+    function mostraData ($data) {
+        if ($data!='') {
+            return (substr($data,8,2).'/'.substr($data,5,2).'/'.substr($data,0,4));
+        }
+        else { 
+            return ''; 
+        }
+    }
+
+    // Passando data do text box "DD/MM/AAAA" para "AAAA-MM-DD"
+    function gravaData ($data) {
+        if ($data != '') {
+            return (substr($data,6,4).'-'.substr($data,3,2).'-'.substr($data,0,2));
+        }
+        else { 
+            return ''; 
+        }
+    }    
+    // Grupo
+    function EscreveGrupo($chave) {
+        $SQL = "SELECT DESCRICAO FROM GRUPO WHERE CHAVE = $chave";
+	$dst = mysql_query($SQL) or die ("<b>ERRO! Instrução Inválida: </b><br/><i>\"" . $SQL . "\"</i>");
+        return mysql_result($dst, 0, "DESCRICAO");
+    }
+    
+?>
